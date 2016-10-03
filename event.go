@@ -35,6 +35,10 @@ func NewEvent(tokens *[]string) (event *Event, err error) {
 		case strings.HasPrefix((*tokens)[0], TOKEN_DTSTART):
 			stamp := consumePrefix(tokens, TOKEN_DTSTART)
 
+			for len(stamp) < 15 {
+				stamp += "0"
+			}
+
 			event.Start, err = time.Parse("20060102T150405", stamp)
 			if err != nil {
 				log.Println(err)
@@ -44,6 +48,10 @@ func NewEvent(tokens *[]string) (event *Event, err error) {
 			consumePrefix(tokens, TOKEN_DTSTAMP)
 		case strings.HasPrefix((*tokens)[0], TOKEN_DTEND):
 			stamp := consumePrefix(tokens, TOKEN_DTEND)
+
+			for len(stamp) < 15 {
+				stamp += "0"
+			}
 
 			event.End, err = time.Parse("20060102T150405", stamp)
 			if err != nil {
