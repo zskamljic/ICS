@@ -2,6 +2,7 @@ package ics
 
 import (
 	"errors"
+	"log"
 	"strings"
 	"time"
 )
@@ -36,7 +37,8 @@ func NewEvent(tokens *[]string) (event *Event, err error) {
 
 			event.Start, err = time.Parse("20060102T150405", stamp)
 			if err != nil {
-				return nil, err
+				log.Println(err)
+				return nil, errors.New("Corrupt start: " + stamp)
 			}
 		case strings.HasPrefix((*tokens)[0], TOKEN_DTSTAMP):
 			consumePrefix(tokens, TOKEN_DTSTAMP)
@@ -45,7 +47,8 @@ func NewEvent(tokens *[]string) (event *Event, err error) {
 
 			event.End, err = time.Parse("20060102T150405", stamp)
 			if err != nil {
-				return nil, err
+				log.Println(err)
+				return nil, errors.New("Corrupt end: " + stamp)
 			}
 		case strings.HasPrefix((*tokens)[0], TOKEN_SUMMARY):
 			event.Summary = consumePrefix(tokens, TOKEN_SUMMARY)
